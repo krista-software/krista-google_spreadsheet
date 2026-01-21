@@ -1,0 +1,260 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id("io.github.surpsg.code-lines") version "0.0.1"
+    id "jacoco"
+    id("org.sonarqube") version "6.3.1.5724"
+}
+
+codeLinesStat {
+    sourceFilters.skipBlankLines = true
+    fileExtensions = ['java']
+}
+
+// SonarQube Configuration
+sonar {
+    properties {
+        property("sonar.projectName", "SonarScanner for Krista Global Catalog (Google Spreadsheets with JaCoCo code coverage)")
+        property("sonar.projectKey", "sonar-scanner-google-spreadsheets")
+        property("sonar.sources", "src/main/java")
+        property("sonar.tests", "src/test/java")
+        property("sonar.java.binaries", "build/classes/java/main")
+        property("sonar.java.test.binaries", "build/classes/java/test")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.junit.reportPaths", "build/test-results/test")
+    }
+}
+
+
+group 'app.krista.extensions.essentials.spreadsheets'
+def computedVersion = "local"
+def computedBaseName = "google_spreadsheets"
+
+
+tasks.register("setReleaseProperties") {
+    dependsOn("generateReleaseProperties")
+    doFirst {
+        def releasePropsFile = file("release.properties")
+        if (releasePropsFile.exists()) {
+            def props = new Properties()
+            releasePropsFile.withInputStream { stream -> props.load(stream) }
+            computedBaseName = (props['extension.name'] ?: computedBaseName).replaceAll(/\s+/, "")
+            computedVersion = props['extension.version'] ?: computedVersion
+
+            project.ext.set("finalBaseName", computedBaseName)
+            project.version = computedVersion
+
+            println "✓ Loaded extension name = ${computedBaseName}, version = ${computedVersion}"
+        } else {
+            logger.warn("⚠ release.properties not found; using default values.")
+            project.ext.set("finalBaseName", computedBaseName)
+            project.version = computedVersion
+        }
+    }
+}
+
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+repositories {
+    maven {
+        url "https://packages.cicd.in.antbrains.com/artifactory/libs-release"
+    }
+    mavenCentral()
+    mavenLocal()
+}
+
+configurations {
+    implementation {
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+
+
+dependencies {
+
+    annotationProcessor 'app.krista:extension-impl-anno-processors:1.0.115'
+    implementation 'app.krista:krista-apis:1.0.115'
+    implementation 'org.apache.commons:commons-csv:1.9.0'
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev20240826-2.0.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.4.0'
+    implementation 'com.google.http-client:google-http-client-jackson2:2.0.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
+    implementation 'com.github.scribejava:scribejava-apis:8.3.3'
+
+    // JUnit 5 (Jupiter) - Main testing framework
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Mockito for mocking
+    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+
+    // AssertJ for fluent assertions (optional but recommended)
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+
+    // Existing test dependencies
+    testImplementation 'com.kristasoft.common:common-test:1.0.43'
+    testImplementation 'app.krista:krista-apis:1.0.102'
+}
+
+tasks.register('createSourceDir', Exec) {
+    dependsOn processResources
+    commandLine "mkdir", "-p", "$projectDir/build/classes/java/main/META-INF/project"
+}
+
+tasks.register('copyGradleFile', Exec) {
+    dependsOn createSourceDir
+    commandLine "cp", "$projectDir/build.gradle", "$projectDir/build/classes/java/main/META-INF/project/build.gradle"
+}
+
+tasks.register('includeSources', Exec) {
+    dependsOn copyGradleFile
+    commandLine "cp", "-r", "$projectDir/src", "$projectDir/build/classes/java/main/META-INF/project/src"
+}
+
+import java.util.regex.Pattern
+
+tasks.register('generateReleaseProperties') {
+    group = 'build'
+    description = 'Generates release.properties file with extension version and domain information'
+
+    doLast {
+        def extensionFilePath = 'src/main/java/app/krista/extensions/essentials/spreadsheets/google_sheets/GoogleSheetsExtension.java'
+        def areaFilePath = 'src/main/java/app/krista/extensions/essentials/spreadsheets/google_sheets/catalog/BasicArea.java'
+        def extensionFile = project.file(extensionFilePath)
+        def areaFile = project.file(areaFilePath)
+
+        if (!extensionFile.exists()) {
+            throw new GradleException("Extension file not found: ${extensionFilePath}")
+        }
+
+        if (!areaFile.exists()) {
+            throw new GradleException("Area file not found: ${areaFilePath}")
+        }
+
+        def properties = new Properties()
+        // Pre-compile the regex pattern for better performance
+        def keyValuePattern = Pattern.compile(/(\w+)\s*=\s*"([^"]+)"/)
+
+        // Extract Extension annotation information
+        extractAnnotationInfo(extensionFile, "@Extension", keyValuePattern) { key, value ->
+            if (key == "version") {
+                properties.setProperty("extension.version", value)
+                logger.lifecycle("Found extension version: ${value}")
+            } else if (key == "name") {
+                properties.setProperty("extension.name", value)
+                logger.lifecycle("Found extension name: ${value}")
+            }
+        }
+
+        // Extract Domain annotation information from the area file
+        extractAnnotationInfo(areaFile, "@Domain", keyValuePattern) { key, value ->
+            if (key == "name") {
+                properties.setProperty("domain.name", value)
+                logger.lifecycle("Found domain name: ${value}")
+            } else if (key == "ecosystemName") {
+                properties.setProperty("ecosystem.name", value)
+                logger.lifecycle("Found ecosystem name: ${value}")
+            }
+        }
+
+        // Set default values if not found in annotations
+        if (!properties.getProperty('extension.name')) {
+            properties.setProperty("extension.name", "google_spreadsheets")
+            logger.lifecycle("Set default extension name: google_spreadsheets")
+        }
+
+        if (!properties.getProperty('extension.version')) {
+            throw new GradleException("Could not find extension version in ${extensionFilePath}")
+        }
+
+        if (!properties.getProperty('domain.name')) {
+            properties.setProperty("domain.name", "Krista")
+            logger.lifecycle("Set default domain name: Krista")
+        }
+
+        if (!properties.getProperty('ecosystem.name')) {
+            properties.setProperty("ecosystem.name", "Essentials")
+            logger.lifecycle("Set default ecosystem name: Essentials")
+        }
+
+        def releasePropertiesFile = project.file('release.properties')
+        def content = properties.collect { key, value -> "${key}=${value}" }.join('\n')
+        releasePropertiesFile.text = content + '\n'
+        logger.lifecycle("Generated release.properties with content:\n${content}")
+    }
+}
+
+// Helper method to extract annotation information
+def extractAnnotationInfo(File file, String annotationName, Pattern keyValuePattern, Closure processProperty) {
+    StringBuilder annotationText = new StringBuilder()
+    boolean inAnnotation = false
+    file.eachLine { line ->
+        line = line.trim()
+        if (line.contains(annotationName)) {
+            inAnnotation = true
+            annotationText.setLength(0) // Reset the buffer when starting a new annotation
+            annotationText.append(line)
+        } else if (inAnnotation) {
+            annotationText.append(line)
+        }
+
+        if (inAnnotation && line.contains(")")) {
+            inAnnotation = false
+            def matcher = keyValuePattern.matcher(annotationText.toString())
+            while (matcher.find()) {
+                def key = matcher.group(1)
+                def value = matcher.group(2)
+                processProperty.call(key, value)
+            }
+        }
+    }
+
+}
+
+tasks.named("jar") {
+    dependsOn tasks.named("generateReleaseProperties")
+}
+
+jar {
+    dependsOn tasks.named("setReleaseProperties")
+    dependsOn includeSources
+    archiveBaseName = project.ext.has("finalBaseName") ? project.ext.finalBaseName : "google_spreadsheets"
+    manifest {}
+    from {
+        configurations.implementation.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    duplicatesStrategy = "exclude"
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // Generate coverage report after tests run
+}
+
+// JaCoCo Configuration
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test // Tests must run before generating the report
+    reports {
+        xml.required = true   // Required for SonarQube
+        html.required = true  // Useful for local viewing
+        csv.required = false
+    }
+}
+
+// Ensure Sonar runs only after JaCoCo report generation
+tasks.named("sonar") {
+    dependsOn jacocoTestReport
+}
+
