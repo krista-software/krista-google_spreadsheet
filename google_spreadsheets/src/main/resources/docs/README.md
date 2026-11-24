@@ -103,7 +103,7 @@ Catalog requests for creating and managing spreadsheets:
 
 ### Version Information
 
-- **Extension Version**: 2.0.4
+- **Extension Version**: 2.0.7
 - **Java Version**: 21
 - **Google Sheets API**: v4
 - **Google Drive API**: v3

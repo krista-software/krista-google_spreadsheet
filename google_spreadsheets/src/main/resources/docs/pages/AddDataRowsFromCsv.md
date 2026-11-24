@@ -8,6 +8,8 @@ This request is ideal for bulk data imports, migrating data from external system
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_9d7d96d2-0781-460b-8428-c4681404f754` |

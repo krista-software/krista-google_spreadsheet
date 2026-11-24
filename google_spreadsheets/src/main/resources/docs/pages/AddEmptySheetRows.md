@@ -8,6 +8,8 @@ This request is ideal for adding space for new records, restructuring spreadshee
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_be2e3758-ec2e-441a-918e-49d5c41cb54f` |

@@ -8,6 +8,8 @@ This request is ideal for adding new records to existing datasets, logging data 
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Area** | Basic |

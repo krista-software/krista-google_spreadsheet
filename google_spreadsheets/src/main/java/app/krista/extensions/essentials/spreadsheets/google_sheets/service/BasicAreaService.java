@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package app.krista.extensions.essentials.spreadsheets.google_sheets.service;
@@ -158,6 +158,15 @@ public class BasicAreaService {
             APPEND_CELLS_RESULT,
             FAILED_APPEND_CELLS,
             String.format("Failed to append cells to spreadsheet ID: %s, sheet: %s", spreadsheetId, sheetName)
+        );
+    }
+
+    public ExtensionResponse appendRowsOfSheet(String spreadsheetId, String sheetName, List<Object> rows) {
+        return executeOperation(
+            () -> googleSheetService.appendRowsOfSheet(spreadsheetId, sheetName, rows),
+            APPEND_ROWS_RESULT,
+            FAILED_APPEND_ROWS,
+            String.format("Failed to append rows to spreadsheet ID: %s, sheet: %s", spreadsheetId, sheetName)
         );
     }
 

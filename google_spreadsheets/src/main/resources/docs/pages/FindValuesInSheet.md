@@ -8,6 +8,8 @@ This request is ideal for locating specific data, finding records, or identifyin
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_4f4ade23-d32c-4dab-ac10-10eb2ddc3c75` |

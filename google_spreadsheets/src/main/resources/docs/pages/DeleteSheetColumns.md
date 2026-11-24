@@ -8,6 +8,8 @@ This request is ideal for removing unnecessary columns, restructuring spreadshee
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_5968e2af-4827-42e2-8849-8980508332e1` |

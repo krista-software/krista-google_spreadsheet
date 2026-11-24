@@ -8,6 +8,8 @@ This request is ideal for removing unnecessary rows, cleaning up data, or restru
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_77f03a68-1e11-40bd-aafa-5040e4bef730` |

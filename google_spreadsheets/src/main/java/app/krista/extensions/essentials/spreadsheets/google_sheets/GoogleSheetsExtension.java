@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package app.krista.extensions.essentials.spreadsheets.google_sheets;
@@ -33,7 +33,8 @@ import java.util.Map;
 @Field.Text(value = GoogleAttributes.CLIENT_ID)
 @Field.Text(value = GoogleAttributes.CLIENT_SECRET, isSecured = true)
 @Field.Text(value = GoogleAttributes.EMAIL)
-@Extension(jaxrsId = SheetConstants.JAXRS_ID,name = "Google Spreadsheet", version = "2.0.5")
+@Extension(jaxrsId = SheetConstants.JAXRS_ID,name = "Google Spreadsheet", version = "2.0.7")
+@ChangeLog(file = "confluence/src/main/resources/documentation/releaseNotes.md")
 @StaticResource(path = "docs", file = "docs")
 public final class GoogleSheetsExtension {
 

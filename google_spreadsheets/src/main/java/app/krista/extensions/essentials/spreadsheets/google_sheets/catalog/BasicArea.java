@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package app.krista.extensions.essentials.spreadsheets.google_sheets.catalog;
@@ -54,7 +54,7 @@ public final class BasicArea {
             name = "Add data rows From Csv",
             description = "Add data rows From Csv",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Text(name = "Add CSV data result", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse addDataRowsFromCsv(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -68,7 +68,7 @@ public final class BasicArea {
             name = "Clear spreadsheet cells",
             description = "Clear spreadsheet cells",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Text(name = "Clear spreadsheet cells result", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse clearSpreadsheetCells(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -84,7 +84,7 @@ public final class BasicArea {
             name = "Delete sheet columns",
             description = "Delete sheet columns",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Text(name = "Delete sheet columns result", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse deleteSheetColumns(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -99,7 +99,7 @@ public final class BasicArea {
             name = "Delete sheet rows",
             description = "Delete sheet rows",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Text(name = "Delete sheet rows result", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse deleteSheetRows(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -115,7 +115,7 @@ public final class BasicArea {
             name = "Add empty sheet columns",
             description = "Add empty sheet columns",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Text(name = "Add empty sheet columns result", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse addEmptySheetColumns(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -130,7 +130,7 @@ public final class BasicArea {
             name = "Add empty sheet rows",
             description = "Add empty sheet rows",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Text(name = "Add empty sheet rows result", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse addEmptySheetRows(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -145,7 +145,7 @@ public final class BasicArea {
             name = "Append Row Data at the End of Spreadsheet",
             description = "This method allows you to add data to the next available row after the existing data.",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field(name = "Append cells result", type = "Number", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse appendRowDataAtTheEndOfSpreadsheet(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -155,13 +155,27 @@ public final class BasicArea {
         return basicAreaService.appendCellsOfSheet(spreadsheetId, sheetName, cellData);
     }
 
+    @CatalogRequest(
+            id = "localDomainRequest_3f2a4e1b-8c7d-4b9e-a5f6-2d3c7e8b9a0f",
+            name = "Add Rows to Sheet",
+            description = "This method allows you to add rows to the next available row after the existing data.",
+            area = "Basic",
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
+    @Field(name = "Append rows result", type = "Number", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
+    public ExtensionResponse appendRowsAtTheEndOfSpreadsheet(
+            @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
+            @Field.Text(name = "Sheet name", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String sheetName,
+            @Field.Desc(name = "Rows", type = "List") List<Object> rows) {
+        LOGGER.info("'Append rows at the end of spreadsheet' initialised");
+        return basicAreaService.appendRowsOfSheet(spreadsheetId, sheetName, rows);
+    }
 
     @CatalogRequest(
             id = "localDomainRequest_21166842-ada9-4fb1-8fde-95600920d89c",
             name = "Add data to sheet cells",
             description = "Add data to sheet cells",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field(name = "Add data to sheet cell result", type = "Number", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse addDataToSheetCells(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -178,7 +192,7 @@ public final class BasicArea {
             name = "Create spreadsheet",
             description = "Create a spreadsheet at a given path.\nIf a path is not specified then create it spreadsheet file at the root location of google drive.",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Desc(name = "Drive file", type = "Entity(Drive File)", required = false)
     public ExtensionResponse createSpreadsheet(
             @Field.Text(name = "Spreadsheet name", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetName) throws IOException {
@@ -190,7 +204,7 @@ public final class BasicArea {
             name = "Find values in sheet",
             description = "Find values in sheet",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Desc(name = "Find values in sheet result", type = "[ Text ]", required = false)
     public ExtensionResponse findValuesInSheet(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -207,7 +221,7 @@ public final class BasicArea {
             name = "Get sheet rows by range",
             description = "Get sheet rows by range",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field.Desc(name = "Sheet rows by range result", type = "[ [ Text ] ]", required = false)
     public ExtensionResponse getSheetRowsByRange(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,
@@ -223,7 +237,7 @@ public final class BasicArea {
             name = "Get sum by sheet range",
             description = "Get sum by sheet range",
             area = "Basic",
-            type = CatalogRequest.Type.CHANGE_SYSTEM)
+            type = CatalogRequest.Type.CHANGE_SYSTEM, tool = true)
     @Field(name = "Get sum by range result", type = "Number", required = false, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {})
     public ExtensionResponse getSumBySheetRange(
             @Field.Text(name = "Spreadsheet Id", required = true, attributes = {@Attribute(name = "visualWidth", value = "S")}, options = {}) String spreadsheetId,

@@ -9,6 +9,7 @@
   - [Add Data Rows From CSV](pages/AddDataRowsFromCsv.md)
   - [Add Data To Sheet Cells](pages/AddDataToSheetCells.md)
   - [Append Row Data At The End Of Spreadsheet](pages/AppendRowDataAtTheEndOfSpreadsheet.md)
+  - [Add Rows to Sheet](pages/AddRowsToSheet.md)
 
 - **Sheet Modification**
   - [Clear Spreadsheet Cells](pages/ClearSpreadsheetCells.md)

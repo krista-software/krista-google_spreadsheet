@@ -172,8 +172,8 @@ Now create the Client ID and Client Secret:
 3. **Authorized JavaScript origins** (optional): Leave empty for this extension
 
 4. **Authorized redirect URIs**: Click **+ ADD URI**
-   - Enter your redirect URI in the format: `{Extension Base URL}/gsextn/callback`
-   - Example: `https://your-krista-instance.com/extensions/google-spreadsheet/gsextn/callback`
+   - Enter your redirect URI in the format: `https://your-krista-instance.com/gsextn/callback`
+   - Replace `your-krista-instance.com` with your actual Krista server domain
    - You can add multiple URIs for different environments (development, staging, production)
 
 ![Authorized Redirect URIs](../_media/CreatingGoogleApp_redirect_uris.png)

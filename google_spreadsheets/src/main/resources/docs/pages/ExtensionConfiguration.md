@@ -52,8 +52,8 @@ The redirect URI is critical for OAuth 2.0 authentication flow:
    - Example: `https://your-krista-instance.com/extensions/google-spreadsheet`
 
 2. **Construct Redirect URI**:
-   - Append `/gsextn/callback` to the Extension Base URL
-   - Complete URI: `https://your-krista-instance.com/extensions/google-spreadsheet/gsextn/callback`
+   - Use the format: `https://your-krista-instance.com/gsextn/callback`
+   - Replace `your-krista-instance.com` with your actual Krista server domain
 
 3. **Add to Google Cloud Console**:
    - Go to Google Cloud Console > APIs & Services > Credentials
@@ -109,11 +109,11 @@ The redirect URI is where Google sends users after they authorize your applicati
 ### Redirect URI Format
 
 ```
-{Extension Base URL}/gsextn/callback
+https://your-krista-instance.com/gsextn/callback
 ```
 
 **Components**:
-- `{Extension Base URL}`: Your Krista instance URL + extension path
+- `https://your-krista-instance.com`: Your Krista instance URL
 - `/gsextn/callback`: Fixed callback path for this extension
 
 ### Common Redirect URI Issues
@@ -242,8 +242,8 @@ WARN: Google API request failed (attempt 1/3) - Connection timeout. Retrying in 
 - Trailing slash mismatch
 
 **Solutions**:
-1. Copy exact Extension Base URL from Krista
-2. Append `/gsextn/callback` exactly
+1. Use the format: `https://your-krista-instance.com/gsextn/callback`
+2. Replace `your-krista-instance.com` with your actual Krista server domain
 3. Add complete URI to Google Console Authorized redirect URIs
 4. Ensure protocol matches (https in production)
 

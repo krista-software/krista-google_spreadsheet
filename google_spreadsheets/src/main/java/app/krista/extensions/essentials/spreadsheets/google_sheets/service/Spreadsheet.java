@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package app.krista.extensions.essentials.spreadsheets.google_sheets.service;
@@ -146,7 +146,11 @@ public final class Spreadsheet {
         com.google.api.services.sheets.v4.Sheets service = googleProvider.getGoogleSheetClient();
         ValueRange body = new ValueRange().setValues(getCellData(cellData));
         AppendValuesResponse result = getAppendValuesResponse(excelSheet, range, service, body);
-        return Double.valueOf(result.getUpdates().getUpdatedCells());
+        UpdateValuesResponse updates = result.getUpdates();
+        if (updates == null || updates.getUpdatedCells() == null) {
+            return 0.0;
+        }
+        return Double.valueOf(updates.getUpdatedCells());
     }
 
     private AppendValuesResponse getAppendValuesResponse(ExcelSheet excelSheet, String range, com.google.api.services.sheets.v4.Sheets service, ValueRange body) {

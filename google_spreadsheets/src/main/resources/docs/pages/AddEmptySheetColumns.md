@@ -8,6 +8,8 @@ This request is ideal for adding space for new data fields, restructuring spread
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_bfbc797a-6d9c-4d0e-b5a2-2a6096ca76b9` |

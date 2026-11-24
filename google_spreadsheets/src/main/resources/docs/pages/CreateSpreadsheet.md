@@ -8,6 +8,8 @@ This request is ideal for programmatically creating new spreadsheets, generating
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_55d3cdef-8e9c-44a0-98bd-eba78771613b` |

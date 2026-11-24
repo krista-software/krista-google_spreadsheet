@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package app.krista.extensions.essentials.spreadsheets.google_sheets.service;
@@ -329,6 +329,79 @@ class BasicAreaServiceTest {
             // Then
             assertThat(result).isNotNull();
             assertThat(result).isEqualTo(expectedFile);
+        }
+    }
+
+    @Nested
+    @DisplayName("Append Rows Of Sheet Tests")
+    class AppendRowsOfSheetTests {
+
+        private BasicAreaService basicAreaService;
+
+        @BeforeEach
+        void setUp() {
+            basicAreaService = new BasicAreaService(googleSheet);
+        }
+
+        @Test
+        @DisplayName("Should successfully append rows and return success response")
+        void shouldAppendRowsSuccessfully() {
+            // Given
+            String spreadsheetId = "test-spreadsheet-id";
+            String sheetName = "Sheet1";
+            List<Object> rows = Arrays.asList(
+                Arrays.asList("A", "B", "C"),
+                Arrays.asList("1", "2", "3")
+            );
+            Double expectedResult = 2.0;
+
+            when(googleSheet.appendRowsOfSheet(spreadsheetId, sheetName, rows))
+                .thenReturn(expectedResult);
+
+            // When
+            var response = basicAreaService.appendRowsOfSheet(spreadsheetId, sheetName, rows);
+
+            // Then
+            assertThat(response).isNotNull();
+            verify(googleSheet).appendRowsOfSheet(spreadsheetId, sheetName, rows);
+        }
+
+        @Test
+        @DisplayName("Should return failure response on IllegalArgumentException")
+        void shouldHandleIllegalArgumentException() {
+            // Given
+            String spreadsheetId = "test-spreadsheet-id";
+            String sheetName = "Sheet1";
+            List<Object> rows = Collections.emptyList();
+
+            when(googleSheet.appendRowsOfSheet(spreadsheetId, sheetName, rows))
+                .thenThrow(new IllegalArgumentException("Invalid input parameters"));
+
+            // When
+            var response = basicAreaService.appendRowsOfSheet(spreadsheetId, sheetName, rows);
+
+            // Then
+            assertThat(response).isNotNull();
+            verify(googleSheet).appendRowsOfSheet(spreadsheetId, sheetName, rows);
+        }
+
+        @Test
+        @DisplayName("Should return failure response on RuntimeException")
+        void shouldHandleRuntimeException() {
+            // Given
+            String spreadsheetId = "test-spreadsheet-id";
+            String sheetName = "Sheet1";
+            List<Object> rows = Arrays.asList("value1", "value2");
+
+            when(googleSheet.appendRowsOfSheet(spreadsheetId, sheetName, rows))
+                .thenThrow(new RuntimeException("Service unavailable"));
+
+            // When
+            var response = basicAreaService.appendRowsOfSheet(spreadsheetId, sheetName, rows);
+
+            // Then
+            assertThat(response).isNotNull();
+            verify(googleSheet).appendRowsOfSheet(spreadsheetId, sheetName, rows);
         }
     }
 

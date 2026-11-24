@@ -8,6 +8,8 @@ This request is ideal for reading data from spreadsheets, extracting specific se
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_fb1ef461-6e67-48b2-910b-359759f2640f` |

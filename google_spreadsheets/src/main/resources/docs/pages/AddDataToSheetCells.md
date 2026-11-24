@@ -8,6 +8,8 @@ This request is ideal for updating specific sections of a spreadsheet, filling i
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_21166842-ada9-4fb1-8fde-95600920d89c` |

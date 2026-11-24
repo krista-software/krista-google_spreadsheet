@@ -8,6 +8,8 @@ This request is ideal for calculating totals, aggregating numeric data, or perfo
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_5e6e2fdb-20a9-4638-b0ab-884dfe56476b` |

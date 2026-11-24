@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package app.krista.extensions.essentials.spreadsheets.google_sheets.service;
@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public final class GoogleSheet {
@@ -102,6 +103,42 @@ public final class GoogleSheet {
         List<Integer> sheetProperties = sheetsInformation.getSheetProperties(excelSheet);
         validateInputParamsForCreateSpreadsheet(sheetProperties == null, MessageConstants.INVALID_SHEET_NAME);
         return spreadsheet.appendCellDataToSheet(excelSheet, cellData);
+    }
+
+    public Double appendRowsOfSheet(String spreadsheetId, String sheetName, List<Object> rows) {
+        validateInputParamsForDeletingSheetColumns(spreadsheetId, sheetName);
+        ExcelSheet excelSheet = new ExcelSheet(spreadsheetId, sheetName);
+        List<Integer> sheetProperties = sheetsInformation.getSheetProperties(excelSheet);
+        validateInputParamsForCreateSpreadsheet(sheetProperties == null, MessageConstants.INVALID_SHEET_NAME);
+        List<List<String>> converted = convertObjectRows(rows);
+        spreadsheet.appendCellDataToSheet(excelSheet, converted);
+        return (double) converted.size();
+    }
+
+    private List<List<String>> convertObjectRows(List<Object> rows) {
+        List<List<String>> result = new ArrayList<>();
+        for (Object row : rows) {
+            if (row instanceof List) {
+                List<?> rowList = (List<?>) row;
+                List<String> rowValues = new ArrayList<>();
+                for (Object cell : rowList) {
+                    rowValues.add(cell != null ? cell.toString() : "");
+                }
+                result.add(rowValues);
+            } else if (row instanceof Map) {
+                Map<?, ?> rowMap = (Map<?, ?>) row;
+                List<String> rowValues = new ArrayList<>();
+                for (Object val : rowMap.values()) {
+                    rowValues.add(val != null ? val.toString() : "");
+                }
+                result.add(rowValues);
+            } else if (row != null) {
+                List<String> singleCell = new ArrayList<>();
+                singleCell.add(row.toString());
+                result.add(singleCell);
+            }
+        }
+        return result;
     }
 
     public Double addDataToSheetCells(String spreadsheetId, String sheetName, String topLeftCell, String bottomRightCell, List<List<String>> cellData) {

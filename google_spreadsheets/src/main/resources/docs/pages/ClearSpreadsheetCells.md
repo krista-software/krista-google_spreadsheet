@@ -8,6 +8,8 @@ This request is ideal for resetting data sections, clearing temporary data, or p
 
 ## Request Details
 
+- **MCP Tool**: ✅ Yes (exposed to the Krista AI agent)
+
 | Property | Value |
 |----------|-------|
 | **Catalog Request ID** | `localDomainRequest_83d11bf1-1d7d-43fe-b84f-d4b00d98ddc8` |
